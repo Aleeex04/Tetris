@@ -5,14 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris Personalizado</title>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #222;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
         canvas {
             display: block;
-            margin: 0 auto;
             background: #000;
+            border: 2px solid #555;
+        }
+
+        #info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        #info > div {
+            text-align: center;
+        }
+
+        #proximaFicha {
+            background: #000;
+            border: 2px solid #555;
         }
     </style>
 </head>
 <body>
+    <div id="info">
+        <div>
+            <h3>Puntuación</h3>
+            <div id="puntuacion">0</div>
+        </div>
+        <div>
+            <h3>Próxima ficha</h3>
+            <canvas id="proximaFicha" width="120" height="120"></canvas>
+        </div>
+    </div>
     <canvas id="tetris" width="300" height="600"></canvas>
     <script src="tetris.js"></script>
 </body>
