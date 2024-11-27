@@ -19,7 +19,7 @@ function dibujarTablero() {
                 tamanoCelda, 
                 tamanoCelda
             );
-            lienzo.strokeStyle = "#333"; // lineas de rejilla
+            lienzo.strokeStyle = "rgba(255, 0, 255, 0.5)"; // lineas de rejilla
             lienzo.strokeRect(x * tamanoCelda,
                 y * tamanoCelda,
                 tamanoCelda,
@@ -30,69 +30,89 @@ function dibujarTablero() {
 dibujarTablero(); 
 
 const piezas = [
-
     {
         nombre: "O", 
         forma: [[1, 1], 
                 [1, 1]], 
         probabilidad: 0.142, 
-        color: "green" },
+        color: "#39FF14" //verde
+    },
 
-    {   nombre: "S", 
+    {   
+        nombre: "S", 
         forma: [[0, 1, 1], 
                 [1, 1, 0]], 
         probabilidad: 0.142, 
-        color: "violet" },
+        color: "#FF1493" //rosa
+    },
 
-    {   nombre: "Z", 
+    {   
+        nombre: "Z", 
         forma: [[1, 1, 0], 
                 [0, 1, 1]], 
         probabilidad: 0.142,
-        color: "blue" },
+        color: "#FF6347" //rojo
+    },
 
-    {   nombre: "L", 
+    {   
+        nombre: "L", 
         forma: [[1, 0], 
                 [1, 0], 
                 [1, 1]], 
         probabilidad: 0.142, 
-        color: "orange" },
+        color: "#00FFFF" //cian
+    },
 
-    {   nombre: "J", 
+    {   
+        nombre: "J", 
         forma: [[0, 1], 
                 [0, 1], 
                 [1, 1]], 
         probabilidad: 0.142, 
-        color: "blue" },
+        color: "#FF4500" //naranja
+    },
 
-    {   nombre: "T", 
+    {   
+        nombre: "T", 
         forma: [[1, 1, 1], 
                 [0, 1, 0]], 
         probabilidad: 0.142, 
-        color: "yellow" },
+        color: "#9400D3" //morado
+    },
 
-    {   nombre: "I", 
+    {   
+        nombre: "I", 
         forma: [[1, 1, 1, 1]], 
         probabilidad: 0.142, 
-        color: "lightblue" },
+        color: "#00FF00" //verde
+    },
 
-    {   nombre: "C", 
+    {   
+        nombre: "C", 
         forma: [[1, 1, 1], 
                 [1, 0, 1]], 
-        probabilidad: 0.13, 
-        color: "red" }
+        probabilidad: 0.142, 
+        color: "#8A2BE2" //azul
+    }
 ];
+
 
 function dibujarPieza(pieza, posX, posY) {
     pieza.forma.forEach((fila, y) => {
         fila.forEach((valor, x) => {
             if (valor) {
                 lienzo.fillStyle = pieza.color; // pintamos el color de la pieza
+                lienzo.shadowColor = pieza.color; // Color del resplandor (se iguala al color de la pieza)
+                lienzo.shadowBlur = 100; // Desenfoque del resplandor (ajústalo según lo necesites)
+
                 lienzo.fillRect(
                     (posX + x) * tamanoCelda,
                     (posY + y) * tamanoCelda, 
                     tamanoCelda, 
                     tamanoCelda
                 );
+                // Limpiar el resplandor después de dibujar la pieza
+                lienzo.shadowBlur = 0;
             }
         });
     });
@@ -109,7 +129,6 @@ function generarPieza() {
             return pieza; // retorna la pieza seleccionada
         }
     }
-    return piezas[piezas.length - 1]; // por si acaso, retorna la última pieza
 }
 
 function chequearColisiones(pieza, posX, posY) {
@@ -123,7 +142,7 @@ function chequearColisiones(pieza, posX, posY) {
                     tableroX < 0 || // Colisión con el borde izquierdo
                     tableroX >= columnas || // Colisión con el borde derecho
                     tableroY >= filas || // Colisión con el fondo
-                    (tableroY >= 0 && tablero[tableroY][tableroX] === 1) // Colisión con una pieza
+                    (tableroY >= 0 && tablero[tableroY][tableroX] === 1) // colision con una pieza
                 ) {
                     return true;
                 }
@@ -144,7 +163,9 @@ function posicionaPieza(pieza, posX, posY) {
 }
 
 let puntuacion = 0;
+let nivel = 1; //dificultad
 const puntuacionElemento = document.getElementById("puntuacion");
+const dificultadElemento = document.getElementById("dificultad");
 
 function eliminarLinea() {
     let lineasEliminadas = 0;
@@ -179,15 +200,35 @@ function eliminarLinea() {
         }
 
         puntuacion += Math.floor(lineasEliminadas * 100 * multiplicador);
+
         puntuacionElemento.textContent = puntuacion; // actualiza el html con la nueva puntuacion
+        // Aumentar el nivel si el puntaje supera ciertos umbrales
+        if (puntuacion >= 500 && nivel < 2) {
+            nivel = 2;
+            dificultadElemento.textContent = nivel;
+        } else if (puntuacion >= 1000 && nivel < 3) {
+            nivel = 3;
+            dificultadElemento.textContent = nivel;
+        }
+    }
+}
+
+// Cambiar la velocidad de caída en función del nivel
+function obtenerVelocidad() {
+    switch (nivel) {
+        case 3:
+            return 100; // más rápido en nivel 3
+        case 2:
+            return 250; // velocidad media en nivel 2
+        default:
+            return 500; // velocidad inicial
     }
 }
 
 
 
 function rotarMatriz(matriz) {
-    return matriz[0].map((_, colIndex) =>
-        matriz.map((fila) => fila[colIndex]).reverse()
+    return matriz[0].map((_, colIndex) => matriz.map((fila) => fila[colIndex]).reverse()
     );
 }
 
@@ -221,7 +262,10 @@ function dibujarProximaPieza(proximaPieza) {
 }
 dibujarProximaPieza(proximaPieza);
 
+let intervalo;
+
 function actualizar() {
+    clearInterval(intervalo);
     if (!chequearColisiones(piezaActual, posX, posY + 1)) {
         posY++;
     } else {
@@ -238,17 +282,20 @@ function actualizar() {
         if (chequearColisiones(piezaActual, posX, posY)) {
             clearInterval(intervalo);
             alert("FIN DE LA PARTIDA, este juego ha sido desarrollado por Alex Roca");
+            location.reload(); //actualizo la pagina cuando acaba la partida
         }
     }
 
     dibujarTablero();
     dibujarPieza(piezaActual, posX, posY);
+    intervalo = setInterval(actualizar, obtenerVelocidad());
+
 }
 
-let intervalo;
 
 function jugar() {
-    intervalo = setInterval(actualizar, 500);
+    intervalo = setInterval(actualizar, obtenerVelocidad());
+
 }
 
 

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="tetris.ico" type="image/x-icon">
     <title>Tetris Personalizado</title>
     <style>
         body {
@@ -19,7 +20,7 @@
         canvas {
             display: block;
             background: #000;
-            border: 3px solid gray;
+            border: 3px solid rgba(131, 131, 131, 0.679);
         }
 
         #info {
@@ -29,8 +30,8 @@
             max-width: 400px;
             margin-bottom: 20px;
         }
-        #puntuacion{
-            font-size: 5em;
+        #puntuacion, #dificultad{
+            font-size: 3em;
         }
         #info > div {
             text-align: center;
@@ -38,7 +39,7 @@
 
         #proximaFicha {
             background: #000;
-            border: 3px solid gray;
+            border: 3px solid rgba(131, 131, 131, 0.679);
         }
     </style>
 </head>
@@ -47,9 +48,11 @@
         <div>
             <h3>Puntuación</h3>
             <div id="puntuacion">0</div>
+            <h3>Dificultad</h3>
+            <div id="dificultad">0</div>
         </div>
         <div>
-            <h3>Próxima ficha</h3>
+            <h3>Próxima pieza</h3>
             <canvas id="proximaFicha" width="180" height="180"></canvas>
         </div>
     </div>
