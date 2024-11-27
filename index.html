@@ -19,7 +19,7 @@
         canvas {
             display: block;
             background: #000;
-            border: 2px solid #555;
+            border: 3px solid gray;
         }
 
         #info {
@@ -29,14 +29,16 @@
             max-width: 400px;
             margin-bottom: 20px;
         }
-
+        #puntuacion{
+            font-size: 5em;
+        }
         #info > div {
             text-align: center;
         }
 
         #proximaFicha {
             background: #000;
-            border: 2px solid #555;
+            border: 3px solid gray;
         }
     </style>
 </head>
@@ -48,7 +50,7 @@
         </div>
         <div>
             <h3>Próxima ficha</h3>
-            <canvas id="proximaFicha" width="120" height="120"></canvas>
+            <canvas id="proximaFicha" width="180" height="180"></canvas>
         </div>
     </div>
     <canvas id="tetris" width="300" height="600"></canvas>
