@@ -19,7 +19,7 @@ function dibujarTablero() {
                 tamanoCelda, 
                 tamanoCelda
             );
-            lienzo.strokeStyle = "rgba(255, 0, 255, 0.5)"; // lineas de rejilla
+            lienzo.strokeStyle = "#00f"; // lineas de rejilla
             lienzo.strokeRect(x * tamanoCelda,
                 y * tamanoCelda,
                 tamanoCelda,
